@@ -1,0 +1,41 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GameController : MonoBehaviour {
+
+    void Start()
+    {
+
+        // Use this for initialization
+        Vector3 upperCorner = new Vector3(Screen.width, Screen.height, 0.0f);
+        Vector3 targetWidth = Camera.main.ScreenToWorldPoint(upperCorner);
+        Spawn();
+        float ballWidth = BowlingBallSprite.GetComponent<Renderer>().bounds.extents.x / 2;
+        float maxWidth = targetWidth.x - ballWidth;
+        StartCoroutine(Spawn());
+       
+	
+    }
+    IEnumerator Spawn()
+    {
+        // Čeka 2 sekunde
+        yield return new WaitForSeconds(2.0f);
+        // Beskonačna petlja
+        while (true)
+        {
+            // Određuje poziciju iz koje će se instancirati kugle
+            Vector3 spawnPosition = new Vector3(Random.Range(- maxWidth, maxWidth),
+           transform.position.y, 0.0f);
+            // Za rotaciju se uzima „default“ vrijednost (0, 0, 0, 0)
+            Quaternion spawnRotation = Quaternion.identity;
+
+            // Instanciranje kugle
+            Instantiate(BowlingBallSprite, spawnPosition, spawnRotation);
+            // Čeka 2 sekunde
+            yield return new WaitForSeconds(2.0f);
+        }
+    }
+
+
+}
